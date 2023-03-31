@@ -19,5 +19,20 @@ Data Cleaning (in Excel)
    - decided to leave rows containing these NULLs as the analysis would focus more on the duration and number of trips
 
 Analysis (in SQL)
-- All the code for this analysis can be found here: 
+- All the code for this analysis can be found here: cyclistic-data-analysis
 
+Visualization
+- Can be found here: https://public.tableau.com/app/profile/zoila.s
+
+Key Findings
+- Members start more trips during commute hours than casual customers
+- Proportionally speaking, except for commute hours, casual customers start slighlty more trips than members during the week
+- Proportionally speaking, members and casual customers start a similar number of trips on during the weekend
+- On average, casual custoemrs consistently have longer trip durations than members
+- Members appear to have little preference over classic or electric bikes
+- Casual customers appear to have a somewhat preference for electric bikes over classic bikes
+
+Recommendations
+1. target casual customer using Cyclistic during commute hours
+2. invest in more electric bikes
+3. have users create accounts with Cyclistic and assign them a customer ID
