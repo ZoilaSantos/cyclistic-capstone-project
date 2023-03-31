@@ -1,0 +1,528 @@
+--after cleaning the data in Excel, I uploaded each month into BigQuery and merged them
+- saved as: trips_2022_03_to_2023_02
+
+SELECT * 
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_04` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_05` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_06` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_07` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_08` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_09` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_10` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_11` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_12`
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2023_02` 
+UNION ALL
+SELECT *
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2023_01`  
+
+
+-- returns the number of trips which used x bike type for members and casual customers
+SELECT 
+  rideable_type AS bike_type,
+  member_casual AS customer_type,
+  COUNT(rideable_type) AS num_trips
+FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+GROUP BY
+  rideable_type,
+  member_casual
+
+-- returns the number of trips that started on each weekday and during each hour for casual customers
+SELECT 
+  Sun.start_hour,
+  Sunday, 
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday
+FROM (
+  #SUNDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Sunday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "1"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Sun
+
+FULL OUTER JOIN (
+  #MONDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Monday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "2"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Mon
+ON Sun.start_hour = Mon.start_hour
+
+FULL OUTER JOIN (
+  #TUESDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Tuesday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "3"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Tues
+ON Mon.start_hour = Tues.start_hour
+
+
+FULL OUTER JOIN (
+  #WEDNESDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Wednesday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "4"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Wed
+ON Tues.start_hour = Wed.start_hour
+
+FULL OUTER JOIN (
+  #THURSDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Thursday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "5"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Thur
+ON Wed.start_hour = Thur.start_hour
+
+FULL OUTER JOIN (
+  #FRIDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Friday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "6"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Fri
+ON Thur.start_hour = Fri.start_hour
+
+FULL OUTER JOIN (
+  #SATURDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Saturday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "7"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Sat
+ON Fri.start_hour = Sat.start_hour
+
+
+-- returns the number of trips that started on each weekday and during each hour for members
+SELECT 
+  Sun.start_hour,
+  Sunday, 
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday
+FROM (
+  #SUNDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Sunday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "1"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Sun
+
+FULL OUTER JOIN (
+  #MONDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Monday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "2"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Mon
+ON Sun.start_hour = Mon.start_hour
+
+FULL OUTER JOIN (
+  #TUESDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Tuesday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "3"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Tues
+ON Mon.start_hour = Tues.start_hour
+
+
+FULL OUTER JOIN (
+  #WEDNESDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Wednesday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "4"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Wed
+ON Tues.start_hour = Wed.start_hour
+
+FULL OUTER JOIN (
+  #THURSDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Thursday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "5"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Thur
+ON Wed.start_hour = Thur.start_hour
+
+FULL OUTER JOIN (
+  #FRIDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Friday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "6"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Fri
+ON Thur.start_hour = Fri.start_hour
+
+FULL OUTER JOIN (
+  #SATURDAY Column
+  SELECT
+    start_hour,
+    COUNT(start_hour) AS Saturday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "7"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Sat
+ON Fri.start_hour = Sat.start_hour
+
+
+
+--returns the average duration (in seconds) of trips that started on each weekday during each hour for casual customers
+SELECT 
+  Sun.start_hour,
+  Sunday, 
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday
+FROM (
+  #SUNDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Sunday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "1"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Sun
+
+FULL OUTER JOIN (
+  #MONDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Monday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "2"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Mon
+ON Sun.start_hour = Mon.start_hour
+
+FULL OUTER JOIN (
+  #TUESDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Tuesday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "3"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Tues
+ON Mon.start_hour = Tues.start_hour
+
+FULL OUTER JOIN (
+  #WEDNESDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Wednesday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "4"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Wed
+ON Tues.start_hour = Wed.start_hour
+
+FULL OUTER JOIN (
+  #THURSDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Thursday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "5"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Thur
+ON Wed.start_hour = Thur.start_hour
+
+FULL OUTER JOIN (
+  #FRIDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Friday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "6"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Fri
+ON Thur.start_hour = Fri.start_hour
+
+FULL OUTER JOIN (
+  #SATURDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Saturday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "7"
+    AND member_casual = "casual"
+  GROUP BY
+    start_hour
+) AS Sat
+ON Fri.start_hour = Sat.start_hour
+
+
+
+--returns the average duration (in seconds) of trips that started on each weekday during each hour for member customers
+SELECT 
+  Sun.start_hour,
+  Sunday, 
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday
+FROM (
+  #SUNDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Sunday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "1"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Sun
+
+FULL OUTER JOIN (
+  #MONDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Monday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "2"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Mon
+ON Sun.start_hour = Mon.start_hour
+
+FULL OUTER JOIN (
+  #TUESDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Tuesday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "3"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Tues
+ON Mon.start_hour = Tues.start_hour
+
+FULL OUTER JOIN (
+  #WEDNESDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Wednesday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "4"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Wed
+ON Tues.start_hour = Wed.start_hour
+
+FULL OUTER JOIN (
+  #THURSDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Thursday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "5"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Thur
+ON Wed.start_hour = Thur.start_hour
+
+FULL OUTER JOIN (
+  #FRIDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Friday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "6"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Fri
+ON Thur.start_hour = Fri.start_hour
+
+FULL OUTER JOIN (
+  #SATURDAY Column
+  SELECT
+    start_hour,
+    AVG(duration_sec) AS Saturday
+  FROM `cyclistic-2022-03-2023-02.cyclistic.trips_2022_03_to_2023_02`
+  WHERE 
+    start_weekday = "7"
+    AND member_casual = "member"
+  GROUP BY
+    start_hour
+) AS Sat
+ON Fri.start_hour = Sat.start_hour
+
+
+
+#returns the difference in the number of trips started on a certain day during a certain hour between casual customers and members
+# NEGATIVE numbers indicates that members started more trips than casual customers
+# POSITIVE numbers indicates that casual customers started more trips than members
+# numbers CLOSER TO ZERO indicate little difference in the number of trips started between members and casual customers
+
+SELECT 
+  casual.start_hour,
+  casual.Sunday - member.Sunday AS Sun_diff,
+  casual.Monday - member.Monday AS Mon_diff,
+  casual.Tuesday - member.Tuesday AS Tue_diff,
+  casual.Wednesday - member.Wednesday AS Wed_diff,
+  casual.Thursday - member.Thursday AS Thur_diff,
+  casual.Friday - member.Friday AS Fri_diff,
+  casual.Saturday - member.Saturday AS Sat_diff,
+
+FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual` AS casual
+FULL OUTER JOIN `cyclistic-2022-03-2023-02.cyclistic.num_trips_member` AS member
+ON casual.start_hour = member.start_hour;
+
+
+#returns the difference in the proportion of trips started on a certain day during a certain hour between casual customers and members
+SELECT 
+  casual.start_hour,
+
+  (casual.Sunday / (SELECT SUM(Sunday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual`)) - (member.Sunday / (SELECT SUM(Sunday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_member`)) AS Sun_diff,
+  
+  (casual.Monday / (SELECT SUM(Monday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual`)) - (member.Monday / (SELECT SUM(Monday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_member`)) AS Mon_diff,
+  
+  (casual.Tuesday / (SELECT SUM(Tuesday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual`)) - (member.Tuesday / (SELECT SUM(Tuesday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_member`)) AS Tue_diff,
+  
+  (casual.Wednesday / (SELECT SUM(Wednesday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual`)) - (member.Wednesday / (SELECT SUM(Wednesday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_member`)) AS Wed_diff
+
+  (casual.Thursday / (SELECT SUM(Thursday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual`)) - (member.Thursday / (SELECT SUM(Sunday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_member`)) AS Thu_diff,
+
+  (casual.Friday / (SELECT SUM(Friday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual`)) - (member.Friday / (SELECT SUM(Friday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_member`)) AS Fri_diff,
+
+  (casual.Saturday / (SELECT SUM(Saturday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual`)) - (member.Saturday / (SELECT SUM(Saturday) FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_member`)) AS Sat_diff,
+
+FROM `cyclistic-2022-03-2023-02.cyclistic.num_trips_casual` AS casual
+FULL OUTER JOIN `cyclistic-2022-03-2023-02.cyclistic.num_trips_member` AS member
+ON casual.start_hour = member.start_hour;
