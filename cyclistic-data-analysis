@@ -49,6 +49,7 @@ GROUP BY
   member_casual
 
 -- returns the number of trips that started on each weekday and during each hour for casual customers
+-- saved as: num_trips_casual
 SELECT 
   Sun.start_hour,
   Sunday, 
@@ -98,7 +99,6 @@ FULL OUTER JOIN (
     start_hour
 ) AS Tues
 ON Mon.start_hour = Tues.start_hour
-
 
 FULL OUTER JOIN (
   #WEDNESDAY Column
@@ -158,6 +158,7 @@ ON Fri.start_hour = Sat.start_hour
 
 
 -- returns the number of trips that started on each weekday and during each hour for members
+-- saved as: num_trips_member
 SELECT 
   Sun.start_hour,
   Sunday, 
@@ -207,7 +208,6 @@ FULL OUTER JOIN (
     start_hour
 ) AS Tues
 ON Mon.start_hour = Tues.start_hour
-
 
 FULL OUTER JOIN (
   #WEDNESDAY Column
@@ -268,6 +268,7 @@ ON Fri.start_hour = Sat.start_hour
 
 
 --returns the average duration (in seconds) of trips that started on each weekday during each hour for casual customers
+-- saved as: avg_duration_casual
 SELECT 
   Sun.start_hour,
   Sunday, 
@@ -377,6 +378,7 @@ ON Fri.start_hour = Sat.start_hour
 
 
 --returns the average duration (in seconds) of trips that started on each weekday during each hour for member customers
+-- saved as: avg_duration_member
 SELECT 
   Sun.start_hour,
   Sunday, 
@@ -485,10 +487,10 @@ ON Fri.start_hour = Sat.start_hour
 
 
 
-#returns the difference in the number of trips started on a certain day during a certain hour between casual customers and members
-# NEGATIVE numbers indicates that members started more trips than casual customers
-# POSITIVE numbers indicates that casual customers started more trips than members
-# numbers CLOSER TO ZERO indicate little difference in the number of trips started between members and casual customers
+-- returns the difference in the number of trips started on a certain day during a certain hour between casual customers and members
+-- NEGATIVE numbers indicates that members started more trips than casual customers
+-- POSITIVE numbers indicates that casual customers started more trips than members
+-- numbers CLOSER TO ZERO indicate little difference in the number of trips started between members and casual customers
 
 SELECT 
   casual.start_hour,
@@ -505,7 +507,8 @@ FULL OUTER JOIN `cyclistic-2022-03-2023-02.cyclistic.num_trips_member` AS member
 ON casual.start_hour = member.start_hour;
 
 
-#returns the difference in the proportion of trips started on a certain day during a certain hour between casual customers and members
+
+-- returns the difference in the proportion of trips started on a certain day during a certain hour between casual customers and members
 SELECT 
   casual.start_hour,
 
